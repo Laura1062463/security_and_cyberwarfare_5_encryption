@@ -15,9 +15,9 @@ De implementatie gebruikt **AES-256-GCM**, een moderne en veilige standaard die 
 ---
 
 ## Functionaliteit
-De applicatie is een **command-line tool** met de volgende commando’s:
+De applicatie is een **command-line tool** met de volgende commands:
 
-| Commando | Functie |
+|  Command  | Functie |
 |-----------|---------|
 | `gen-key` | Genereert een nieuwe 256-bit sleutel |
 | `encrypt` | Versleutelt tekst met AES-256-GCM |
