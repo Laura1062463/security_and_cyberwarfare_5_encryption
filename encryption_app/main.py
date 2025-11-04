@@ -2,7 +2,31 @@ import argparse
 from getpass import getpass
 from cipher import SymmetricCipher
 from key_manager import KeyManager
+import os
 
+DEMO_KEY_FILE = "demo_key.bin"
+
+def demo():
+    # Genereer of laad demo sleutel
+    if not os.path.exists(DEMO_KEY_FILE):
+        key = KeyManager.generate_key()
+        with open(DEMO_KEY_FILE, "wb") as f:
+            f.write(key)
+        print("Generated new demo key.")
+    else:
+        with open(DEMO_KEY_FILE, "rb") as f:
+            key = f.read()
+        print("Loaded existing demo key.")
+
+    cipher = SymmetricCipher(key)
+    text = "Hello demo world!"
+    encrypted = cipher.encrypt(text)
+    decrypted = cipher.decrypt(encrypted)
+
+    print("\nDemo results:")
+    print("Key (hex):", key.hex())
+    print("Encrypted:", encrypted)
+    print("Decrypted:", decrypted)
 
 def main():
     parser = argparse.ArgumentParser(description="Simple AES-256 encryption app")
@@ -17,6 +41,8 @@ def main():
 
     load = sub.add_parser("load-key", help="Load a key protected by a password")
     load.add_argument("path")
+
+    sub.add_parser("demo", help="Run full demo with auto-generated key")
 
     args = parser.parse_args()
 
@@ -45,6 +71,9 @@ def main():
         password = getpass("Enter password: ")
         key = KeyManager.load_encrypted(password, args.path)
         print("Loaded key (hex):", key.hex())
+
+    elif args.command == "demo":
+        demo()
 
     else:
         parser.print_help()
